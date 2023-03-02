@@ -30,14 +30,28 @@ const getAll = async (ctx: RouterContext, next: any) => {
 
 const createArticle = async (ctx: RouterContext, next: any) => {
     //let {title: any, fullText: any} = ctx.request.body;
-    let c: any = ctx.request.body;
-    let title = c.title;
-    let fullText = c.fullText;
-    let newArticle = {title: title, fullText: fullText};
-    articles.push(newArticle);
-    ctx.status = 201;
-    ctx.body = newArticle;
+    // let c: any = ctx.request.body;
+    // let title = c.title;
+    // let fullText = c.fullText;
+    // let newArticle = {title: title, fullText: fullText};
+    // articles.push(newArticle);
+    // ctx.status = 201;
+    // ctx.body = newArticle;
+    // await next();
+
+    const body = ctx.request.body;
+    let result = await model.add(body);
+    if(result.status==201){
+        ctx.status = 201;
+        ctx.body = body;
+
+    }else{
+        ctx.status = 500;
+        ctx.body = {err: "insert data failed"};
+    }
     await next();
+
+
 }
 
 const getById = async (ctx: RouterContext, next: any) => {
